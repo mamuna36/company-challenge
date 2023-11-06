@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import ItemsList from "./ItemsList";
+import EditProjectModal from "./EditProjectModal";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AppContextProvider } from "./context/appContext";
 
 function App() {
+  const [projectToEdit, setProjectToEdit] = useState(null);
+  const [editModal, setEditModal] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <div className="App">
+        <AppContextProvider>
+          <ItemsList
+            openEditModal={setEditModal}
+            setProjectToEdit={setProjectToEdit}
+          />
+          {editModal && (
+            <EditProjectModal
+              editModal={editModal}
+              setEditModal={setEditModal}
+              projectToEdit={projectToEdit}
+            />
+          )}
+        </AppContextProvider>
+      </div>
+    </LocalizationProvider>
   );
 }
 
